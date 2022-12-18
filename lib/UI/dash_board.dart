@@ -79,10 +79,11 @@ Widget mainDrawer() {
             itemCount: AppString.list2.length,
             itemBuilder: (context, index) {
               return ListTile(
-                leading:CircleAvatar(
-                  backgroundImage: AssetImage(AppString.list2[index]['icon'].toString()),
+
+                leading: CircleAvatar(
                   backgroundColor: Colors.white,
                   radius: 13,
+                  child: Icon(AppString.list2[index]['icon'], color: Colors.teal,),
                 ),
                 title: Text(AppString.list2[index]['text'].toString(),
                   style: const TextStyle(fontSize: 15),
