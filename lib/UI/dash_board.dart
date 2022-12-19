@@ -1,4 +1,6 @@
 import 'package:expense_manager/UI/All.dart';
+import 'package:expense_manager/UI/account.dart';
+import 'package:expense_manager/UI/add_personal_expense.dart';
 import 'package:expense_manager/UI/personal_expense.dart';
 import 'package:expense_manager/Utils/AppString.dart';
 import 'package:flutter/material.dart';
@@ -11,41 +13,51 @@ class DashBoard extends StatefulWidget {
 }
 
 class _DashBoardState extends State<DashBoard> {
-  @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        drawer: mainDrawer(),
-        appBar: AppBar(
-          title: const Text('Personal Expense'),
-          actions: const [
-            Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Icon(Icons.search),
-            ),
-            Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Icon(Icons.menu),
-            )
-          ],
-          bottom: const TabBar(
-            tabs: [
-              Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Text('PERSONAL EXPENSE', style: TextStyle(fontSize: 15)),
-              ),
-              Padding(padding: EdgeInsets.all(10.0), child: Text('ALL', style: TextStyle(fontSize: 15))),
-            ],
+
+@override
+Widget build(BuildContext context) {
+  return DefaultTabController(
+    length: 2,
+    child: Scaffold(
+      drawer: mainDrawer(),
+      appBar: AppBar(
+        title: const Text('Personal Expense'),
+        actions: [
+          const Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Icon(Icons.search),
           ),
-        ),
-        body: const TabBarView(
-          children: [PersonalExpense(), All()],
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: GestureDetector(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const Account(),));
+              } ,
+                child: Icon(Icons.menu)),
+          )
+        ],
+        bottom: const TabBar(
+          tabs: [
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Text('PERSONAL EXPENSE', style: TextStyle(fontSize: 15)),
+            ),
+            Padding(padding: EdgeInsets.all(10.0), child: Text('ALL', style: TextStyle(fontSize: 15))),
+          ],
         ),
       ),
-    );
-  }
-}
+      body: const TabBarView(
+        children: [PersonalExpense(), All()],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const AddPersonalExpense(),));
+        },
+        child: const Icon(Icons.add, size: 30),
+      ),
+    ),
+  );
+}}
 
 Widget mainDrawer() {
   return Drawer(
@@ -79,7 +91,6 @@ Widget mainDrawer() {
             itemCount: AppString.list2.length,
             itemBuilder: (context, index) {
               return ListTile(
-
                 leading: CircleAvatar(
                   backgroundColor: Colors.white,
                   radius: 13,

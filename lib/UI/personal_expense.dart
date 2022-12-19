@@ -1,3 +1,4 @@
+import 'package:expense_manager/UI/add_button.dart';
 import 'package:expense_manager/Utils/AppString.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +36,7 @@ class _PersonalExpenseState extends State<PersonalExpense> {
                           child: Column(
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Center(
                                       child: TextButton(
@@ -55,7 +56,9 @@ class _PersonalExpenseState extends State<PersonalExpense> {
           Padding(
             padding: const EdgeInsets.all(11.0),
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const AddButton(),));
+              },
               child: Container(
                 height: 50,
                 decoration: const BoxDecoration(
