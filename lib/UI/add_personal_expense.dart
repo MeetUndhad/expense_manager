@@ -12,6 +12,7 @@ class AddPersonalExpense extends StatefulWidget {
 }
 
 class _AddPersonalExpenseState extends State<AddPersonalExpense> {
+
   TextEditingController timeController = TextEditingController();
   String dropdownValue = list1.first;
   String type = "Income";
@@ -64,6 +65,7 @@ class _AddPersonalExpenseState extends State<AddPersonalExpense> {
                   padding: const EdgeInsets.all(8.0),
                   child: ToggleSwitch(
                     initialLabelIndex: 0,
+                    cornerRadius: 12,
                     totalSwitches: 2,
                     activeBgColor: const [Colors.teal],
                     inactiveBgColor: Colors.white,
@@ -73,7 +75,7 @@ class _AddPersonalExpenseState extends State<AddPersonalExpense> {
                     fontSize: 13,
                     labels: const ['Expense', 'Income'],
                     onToggle: (index) {
-                      /* if(index == 1){
+                       /*if(index == 1){
 
                       }
                       else{
@@ -83,31 +85,52 @@ class _AddPersonalExpenseState extends State<AddPersonalExpense> {
                   ),
                 ),
 
+                const SizedBox(width: 30,),
                 // Time
+                GestureDetector(
+                  onTap: (){
+                    // Navigator.push(context, MaterialPageRoute(builder: (context) => ShowDate(),));
+                    ShowDate();
+                  },
+                  child: Text(
+                    DateFormat('yyyy/mm/dd').format(DateTime.now()),
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ),
+                SizedBox(width: 15,),
                 Text(
-                  DateFormat(' yyyy/mm/dd  hh:mm').format(DateTime.now()),
+                  DateFormat('HH : MM').format(DateTime.now()),
                   style: const TextStyle(color: Colors.red),
                 ),
               ],
             ),
 
             ListTile(
-              leading: const Text('Amount ', style: TextStyle(fontSize: 18)),
+              leading: const Text('Amount', style: TextStyle(fontSize: 18)),
               title: TextFormField(
+                cursorColor: Colors.teal,
+                decoration: const InputDecoration(focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.teal))),
                 keyboardType: TextInputType.number,
                 cursorHeight: 25,
               ),
-              trailing: const CircleAvatar(
+              trailing: CircleAvatar(
                   backgroundColor: Colors.blue,
-                  child: Icon(
-                    Icons.calculate,
-                    color: Colors.white,
+                  child: GestureDetector(
+                    onTap: (){
+
+                    },
+                    child: const Icon(
+                      Icons.calculate,
+                      color: Colors.white,
+                    ),
                   )),
             ),
 
             ListTile(
-              leading: const Text('Payee    ', style: TextStyle(fontSize: 18)),
+              leading: const Text('Payee   ', style: TextStyle(fontSize: 18)),
               title: TextFormField(
+                cursorColor: Colors.teal,
+                decoration: const InputDecoration(focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.teal))),
                 cursorHeight: 25,
               ),
               trailing: const CircleAvatar(
@@ -119,7 +142,7 @@ class _AddPersonalExpenseState extends State<AddPersonalExpense> {
             ),
 
             const ListTile(
-              leading: Text('Category  ', style: TextStyle(fontSize: 18)),
+              leading: Text('Category', style: TextStyle(fontSize: 18)),
               title: Text(
                 'Uncategorized',
                 style: TextStyle(color: Colors.red, fontSize: 15),
@@ -132,7 +155,7 @@ class _AddPersonalExpenseState extends State<AddPersonalExpense> {
                   )),
             ),
             const ListTile(
-              leading: Text('Payment\nMethod     ', style: TextStyle(fontSize: 18)),
+              leading: Text('Payment\nMethod', style: TextStyle(fontSize: 18)),
               title: Text(
                 'Cash',
                 style: TextStyle(color: Colors.red, fontSize: 15),
@@ -146,7 +169,7 @@ class _AddPersonalExpenseState extends State<AddPersonalExpense> {
             ),
 
             const ListTile(
-              leading: Text('Payment  ', style: TextStyle(fontSize: 18)),
+              leading: Text('Payment', style: TextStyle(fontSize: 18)),
               title: Text(
                 'Cleared',
                 style: TextStyle(color: Colors.red, fontSize: 15),
@@ -162,6 +185,8 @@ class _AddPersonalExpenseState extends State<AddPersonalExpense> {
             ListTile(
               leading: const Text('Ref./Cheque No', style: TextStyle(fontSize: 18)),
               title: TextFormField(
+                cursorColor: Colors.teal,
+                decoration: const InputDecoration(focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.teal))),
                 cursorHeight: 25,
               ),
               trailing: TextButton(
@@ -173,8 +198,10 @@ class _AddPersonalExpenseState extends State<AddPersonalExpense> {
             ),
 
             ListTile(
-              leading: const Text('Description ', style: TextStyle(fontSize: 18)),
+              leading: const Text('Description', style: TextStyle(fontSize: 18)),
               title: TextFormField(
+                cursorColor: Colors.teal,
+                decoration: const InputDecoration(focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.teal))),
                 cursorHeight: 25,
               ),
               trailing: TextButton(
@@ -196,11 +223,11 @@ class _AddPersonalExpenseState extends State<AddPersonalExpense> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(onPressed: () {}, child: const Text('Back')),
+                  child: ElevatedButton(onPressed: () {}, child: const Text('Auto fill')),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(onPressed: () {}, child: const Text('New')),
+                  child: ElevatedButton(onPressed: () {}, child: const Text('Back')),
                 )
               ],
             )
@@ -209,4 +236,29 @@ class _AddPersonalExpenseState extends State<AddPersonalExpense> {
       ),
     );
   }
+
+  Widget ShowDate(){
+    return TextFormField(
+      showCursor: false,
+      keyboardType: TextInputType.none,
+      controller: timeController,
+      readOnly: true,
+      onTap: () async {
+        TimeOfDay? pickedTime = await showTimePicker(
+            initialTime: TimeOfDay.now(),
+            context: context
+        );
+        if(pickedTime != null ){
+          DateTime parsedTime = DateFormat.jm().parse(pickedTime.format(context).toString());
+          String formattedTime = DateFormat('HH:mm:ss').format(parsedTime);
+          timeController.text = formattedTime;
+        }else{
+          print("Time is not selected");
+        }
+      },
+    );
+  }
+
 }
+
+
