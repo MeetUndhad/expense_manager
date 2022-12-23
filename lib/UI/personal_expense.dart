@@ -244,17 +244,9 @@ class _PersonalExpenseState extends State<PersonalExpense> {
                             });
                           }),
                           Text('income'),
-                         /* IconButton(onPressed: () { }, icon: Icon(Icons.radio_button_checked),),
-                          IconButton(onPressed: () { }, icon: Icon(Icons.radio_button_checked)),*/
                         ],
                       ),
-                      // ListTile(
-                      //   leading: Text('5531354'),
-                      //   trailing: Row(children: [
-                      //     IconButton(onPressed: () {}, icon: Icon(Icons.radio_button_checked), ),
-                      //     IconButton(onPressed: () {}, icon: Icon(Icons.radio_button_checked), ),
-                      //   ],)
-                      // ),
+
                       SfCartesianChart(
                         series: <ChartSeries>[
                           // ignore: avoid_types_as_parameter_names
