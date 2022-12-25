@@ -1,6 +1,9 @@
+import 'package:expense_manager/UI/add_button.dart';
 import 'package:expense_manager/controller/list_controller.dart';
 import 'package:expense_manager/helper/databade_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
@@ -40,7 +43,6 @@ class _AddPersonalExpenseState extends State<AddPersonalExpense> {
 
   Future selecttime (BuildContext context) async{
     picked = (await showTimePicker(
-
         context: context,
         initialTime: time))!;
 
@@ -101,6 +103,7 @@ class _AddPersonalExpenseState extends State<AddPersonalExpense> {
         ],
       ),
       body: GetBuilder(
+        init: ListController(),
         builder: (ListController controller){
           return SingleChildScrollView(
             child: Column(
@@ -152,10 +155,6 @@ class _AddPersonalExpenseState extends State<AddPersonalExpense> {
                       },
                     ),
 
-                    /*Text(
-                    DateFormat('HH : MM').format(DateTime.now()),
-                    style: const TextStyle(color: Colors.red),
-                  ),*/
                   ],
                 ),
 
@@ -261,23 +260,115 @@ class _AddPersonalExpenseState extends State<AddPersonalExpense> {
                   title: TextFormField(
                     controller: descriptioncontroller,
                     cursorColor: Colors.teal,
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.text,
                     decoration: const InputDecoration(focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.teal))),
                     cursorHeight: 25,
                   ),
                   trailing: TextButton(
-                    onPressed: () {},
-                    child: const Icon(Icons.camera_alt),
+                    onPressed: () {
+
+                    },
+                    child: const Icon(Icons.camera_alt, color: Colors.black, size: 40,),
                   ),
                 ),
 
-                const Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      '     More...',
-                      style: TextStyle(color: Colors.teal),
-                    )),
-                ListView.builder(
+                SizedBox(height: 20,),
+                // const Align(
+                //     alignment: Alignment.topLeft,
+                //     child: Text(
+                //       '     More...',
+                //       style: TextStyle(color: Colors.teal),
+                //     )),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: ElevatedButton(onPressed: () async{
+
+                          if(amountcontroller.text.isNotEmpty || payeecontroller.text.isNotEmpty || chequecontroller.text.isNotEmpty)
+                          {
+                            Fluttertoast.showToast(
+                              msg: "Insert Successfully",
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 2,
+                              backgroundColor: Colors.grey,
+                            );
+
+                            Map<String, dynamic> data = {
+                              DatabaseHelper.amount: amountcontroller.text,
+                              DatabaseHelper.payee: payeecontroller.text,
+                              DatabaseHelper.chequeno: chequecontroller.text
+                            };
+                            await dbHelper.insert(data);
+                            controller.getAllDataFromDatabase();
+                            amountcontroller.isBlank;
+                            payeecontroller.isBlank;
+                            payeecontroller.isBlank;
+
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => AddPersonalExpense(),));
+                          }
+                          else{
+                            AlertDialog alert = AlertDialog(
+                              title: const Text("Alert"),
+                              content: const Text("Please enter a valid detail"),
+                              actions: [
+                                TextButton(onPressed: (){
+                                  Navigator.pop(context);
+                                }, child: Text('Ok'))
+                              ],
+                            );
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return alert;
+                              },
+                            );
+                          }
+
+                      }, child: Text('Ok & New')),
+                    ),
+
+                    ElevatedButton(onPressed: () async{
+                          if(amountcontroller.text.isNotEmpty || payeecontroller.text.isNotEmpty || chequecontroller.text.isNotEmpty)
+                          {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => AddButton(),));
+
+                            Map<String, dynamic> data = {
+                              DatabaseHelper.amount: amountcontroller.text,
+                              DatabaseHelper.payee: payeecontroller.text,
+                              DatabaseHelper.chequeno: payeecontroller.text
+                            };
+                            await dbHelper.insert(data);
+                            controller.getAllDataFromDatabase();
+                            amountcontroller.isBlank;
+                            payeecontroller.isBlank;
+                            payeecontroller.isBlank;
+                          }
+                          else{
+                            AlertDialog alert = AlertDialog(
+                              title: const Text("Alert"),
+                              content: const Text("Please enter a valid detail"),
+                              actions: [
+                                TextButton(onPressed: (){
+                                  Navigator.pop(context);
+                                }, child: Text('Ok'))
+                              ],
+                            );
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return alert;
+                              },
+                            );
+                          }
+
+                    }, child: Text('Ok'))
+                  ],
+                ),
+
+                /*ListView.builder(
                   itemBuilder: (context, index) {
                     return Row(
                       children: [
@@ -294,13 +385,12 @@ class _AddPersonalExpenseState extends State<AddPersonalExpense> {
                             amountcontroller.text = controller.list1[index]['amount'];
                             payeecontroller.text = controller.list1[index]['payee'];
                             chequecontroller.text = controller.list1[index]['chequeno'];
-                            // descriptioncontroller.text = controller.list1[index]['description'];
                           }, child: const Text('Ok')),
                         ),
                       ],
                     );
                   },
-                )
+                )*/
               ],
             ),
           );

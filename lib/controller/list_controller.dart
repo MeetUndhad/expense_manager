@@ -6,7 +6,7 @@ class ListController extends GetxController{
   var list1 = [];
   getAllDataFromDatabase() async {
     await dbHelper.queryAllRows().then((value) {
-      print("value :: $value");
+      // print("value :: $value");
       list1.addAll(value);
     });
     update();

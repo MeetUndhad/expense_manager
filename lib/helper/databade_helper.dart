@@ -58,13 +58,13 @@ class DatabaseHelper{
 
   Future<int> updateStatic(Map<String, dynamic> row, String id) async{
     Database? db = await database;
-    return await db!.update(table, row, where: '$chequeno = ?', whereArgs: [id]);
+    return await db!.update(table, row, where: '$columnId = ?', whereArgs: [id]);
   }
 
 
   Future<int> delete(int id) async {
     Database? db = await database;
     return await db!.delete(table,
-        where: '$chequeno = ?', whereArgs: [id]);
+        where: '$columnId = ?', whereArgs: [id]);
   }
 }
